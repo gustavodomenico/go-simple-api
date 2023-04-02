@@ -11,18 +11,12 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func SetUpRouter() *gin.Engine {
-	router := gin.Default()
-	return router
-}
-
 func TestGetAlbums(t *testing.T) {
-	r := SetUpRouter()
-	r.GET("/albums", getAlbums)
+	var router *gin.Engine = SetUpRouter()
 
 	req, _ := http.NewRequest("GET", "/albums", nil)
 	w := httptest.NewRecorder()
-	r.ServeHTTP(w, req)
+	router.ServeHTTP(w, req)
 
 	var got []Album
 	json.NewDecoder(w.Body).Decode(&got)
@@ -32,8 +26,7 @@ func TestGetAlbums(t *testing.T) {
 }
 
 func TestPostAlbums(t *testing.T) {
-	r := SetUpRouter()
-	r.POST("/albums", getAlbums)
+	var router *gin.Engine = SetUpRouter()
 
 	var newAlbum Album = Album{
 		ID:     "1",
@@ -46,7 +39,7 @@ func TestPostAlbums(t *testing.T) {
 
 	req, _ := http.NewRequest("POST", "/albums", bytes.NewBuffer(jsonValue))
 	w := httptest.NewRecorder()
-	r.ServeHTTP(w, req)
+	router.ServeHTTP(w, req)
 
 	var got []Album
 	json.NewDecoder(w.Body).Decode(&got)
